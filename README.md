@@ -62,6 +62,16 @@ T-2CAN 전용으로 다시 작성한 것입니다.
 
 ---
 
+## 빠른 시작
+
+1. 펌웨어를 플래시합니다 — [Releases](https://github.com/anoblekman/t2can-roaming/releases/latest)의 `.bin` 또는 소스 빌드(아래 "빌드 및 플래시" 참고).
+2. Wi-Fi **`T2CAN-ROAMING`** 에 접속합니다 (기본 비밀번호 **`passwd`**).
+3. 브라우저에서 **`http://192.168.4.1`** 을 엽니다.
+4. **접속 후 바로 비밀번호를 바꾸세요.** 대시보드의 **Tools → Network settings**에서 SSID·비밀번호를 변경합니다(WPA2, 8–63자). AP 비밀번호가 이 장치의 유일한 접근 보호입니다.
+5. 부팅 시 기본은 **Listen**(무음, 송신 안 함)입니다. 주입하려면 **Active**로 전환하세요.
+
+---
+
 ## 기능
 
 | 기능 | 프레임 | 동작 내용 |

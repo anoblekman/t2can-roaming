@@ -59,6 +59,16 @@ in-car parking maneuver.
 
 ---
 
+## Quick start
+
+1. Flash the firmware — a `.bin` from [Releases](https://github.com/anoblekman/t2can-roaming/releases/latest), or a source build (see "Build & flash" below).
+2. Connect to the Wi-Fi network **`T2CAN-ROAMING`** (default password **`passwd`**).
+3. Open **`http://192.168.4.1`** in a browser.
+4. **Change the password immediately.** In the dashboard go to **Tools → Network settings** and set a new SSID/password (WPA2, 8–63 chars). The AP password is this device's only access protection.
+5. It boots in **Listen** mode (silent, transmits nothing); switch to **Active** to inject.
+
+---
+
 ## Features
 
 | Feature | Frame | What it does |
