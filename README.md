@@ -1,3 +1,5 @@
+**English** | [한국어](README.ko.md)
+
 # T2CAN-ROAMING
 
 Firmware for a **LilyGo T-2CAN** board (ESP32-S3, dual CAN) that attaches to a
