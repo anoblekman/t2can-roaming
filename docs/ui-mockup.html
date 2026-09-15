@@ -1,0 +1,306 @@
+<!-- Static preview of the current T2CAN-ROAMING dashboard UI, generated from src/web_page.h — for documentation only. -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>T2CAN-ROAMING</title>
+<style>
+:root {
+  --blue:   #007AFF;
+  --green:  #34C759;
+  --red:    #FF3B30;
+  --orange: #FF9500;
+  --gray:   #8E8E93;
+
+  --bg:        #F2F2F7;
+  --card:      #FFFFFF;
+  --label:     #000000;
+  --label2:    rgba(60,60,67,0.60);
+  --label3:    rgba(60,60,67,0.30);
+  --sep:       rgba(60,60,67,0.29);
+  --fill:      rgba(120,120,128,0.12);
+  --switch-off:rgba(120,120,128,0.16);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #000000;
+    --card:      #1C1C1E;
+    --label:     #FFFFFF;
+    --label2:    rgba(235,235,245,0.60);
+    --label3:    rgba(235,235,245,0.30);
+    --sep:       rgba(84,84,88,0.65);
+    --fill:      rgba(120,120,128,0.24);
+    --switch-off:rgba(120,120,128,0.32);
+  }
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--label);
+  font: 17px/1.294 -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Apple SD Gothic Neo", "Segoe UI", system-ui, sans-serif;
+  padding: max(8px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+           max(32px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  max-width: 560px;
+  margin-inline: auto;
+}
+/* 폴링 실패(보드 연결 끊김) 표시. 상단 헤더를 없애 문구를 놓을 자리가 없으므로
+   화면 전체를 흐리게 한다 — 값이 멈춘 채 그대로 보여 살아있는 것으로 오해하는
+   것을 막는 게 목적이다. */
+body.stale { opacity: 0.45; transition: opacity 0.2s; }
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 8px 0 8px; }
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 14px 15px 15px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.card .hd {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 15px; font-weight: 600; letter-spacing: -0.24px;
+}
+.card .hd .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.card .big {
+  font-size: 26px; font-weight: 700; letter-spacing: 0.36px;
+  font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.card .note { font-size: 13px; color: var(--label2); letter-spacing: -0.08px; }
+.on  { color: var(--green); }
+.off { color: var(--gray); }
+.bad { color: var(--red); }
+
+
+.hdr {
+  font-size: 13px; font-weight: 400; color: var(--label2);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 26px 16px 7px;
+}
+.grp { background: var(--card); border-radius: 10px; overflow: hidden; }
+.row {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 44px; padding: 10px 16px;
+  position: relative;
+}
+.row + .row::before {
+  content: ""; position: absolute; top: 0; left: 16px; right: 0;
+  height: 1px; transform: scaleY(0.5); transform-origin: top;
+  background: var(--sep);
+}
+.row .lb { flex: 1; min-width: 0; letter-spacing: -0.41px; }
+.row .lb .d { font-size: 13px; color: var(--label2); margin-top: 2px; letter-spacing: -0.08px; }
+.row .val {
+  color: var(--label2); font-variant-numeric: tabular-nums;
+  letter-spacing: -0.41px; text-align: right;
+}
+.row .val.mono { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 15px; }
+.foot { font-size: 13px; color: var(--label2); padding: 7px 16px 0; letter-spacing: -0.08px; }
+.chev { color: var(--label3); font-size: 17px; margin-left: -4px; }
+.tint { color: var(--blue); }
+.danger { color: var(--red); }
+.tbtn {
+  color: var(--blue); font-size: 15px; font-weight: 600;
+  padding: 6px 14px; border-radius: 8px; background: var(--fill);
+  cursor: pointer; user-select: none; letter-spacing: -0.24px; flex: none;
+}
+
+.fld {
+  flex: 1; min-width: 0; text-align: right;
+  border: none; background: transparent; color: var(--label);
+  font: inherit; padding: 0; margin: 0;
+  -webkit-appearance: none; appearance: none; outline: none;
+}
+.fld::placeholder { color: var(--label3); }
+
+.sw {
+  width: 51px; height: 31px; border-radius: 16px; flex: none;
+  background: var(--switch-off); position: relative;
+  transition: background .25s;
+  cursor: pointer;
+}
+.sw.on { background: var(--green); }
+.sw::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 27px; height: 27px; border-radius: 50%; background: #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.16);
+  transition: transform .25s;
+}
+.sw.on::after { transform: translateX(20px); }
+
+.seg {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  background: var(--fill); border-radius: 9px; padding: 2px; gap: 2px;
+}
+.seg span {
+  text-align: center; padding: 6px 4px; border-radius: 7px;
+  font-size: 13px; font-weight: 500; letter-spacing: -0.08px;
+  color: var(--label);
+  cursor: pointer;
+  user-select: none;
+}
+.seg span.sel {
+  background: var(--card); font-weight: 600;
+  box-shadow: 0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04);
+}
+.segrow { padding: 12px 16px; }
+.segrow .cap {
+  font-size: 13px; color: var(--label2); margin-bottom: 8px; letter-spacing: -0.08px;
+}
+
+.ota-track { height: 8px; border-radius: 4px; background: var(--fill); overflow: hidden; }
+.ota-fill { height: 100%; width: 0%; background: var(--blue); transition: width .15s; }
+.ota-fill.ok { background: var(--green); }
+.ota-fill.bad { background: var(--red); }
+
+/* 하단 버전 표기 — 페이지 맨 아래 한 줄, 작게 회색. */
+.ver {
+  text-align: center; font-size: 12px; color: var(--label3);
+  padding: 24px 0 4px; font-variant-numeric: tabular-nums;
+}
+</style>
+</head>
+<body>
+
+<!-- ── 계측 카드 ─────────────────────────────────────────── -->
+<div class="cards">
+
+  <div class="card">
+    <div class="hd"><span class="dot" id="dot-drive" style="background:var(--green)"></span>주행</div>
+    <div class="big on" id="big-drive">주입 중</div>
+    <div class="note" id="note-drive">통과 · 218 Hz</div>
+  </div>
+
+  <div class="card">
+    <div class="hd"><span class="dot" id="dot-summon" style="background:var(--gray)"></span>서먼</div>
+    <div class="big off" id="big-summon">대기</div>
+    <div class="note" id="note-summon">P단 대기</div>
+  </div>
+
+</div>
+
+<!-- ── 동작 모드 ─────────────────────────────────────────── -->
+<div class="hdr">동작 모드</div>
+<div class="grp">
+  <div class="segrow">
+    <div class="seg">
+      <span id="seg-listen" onclick="setAct(false)">리슨</span>
+      <span id="seg-active" class="sel" onclick="setAct(true)">활성</span>
+    </div>
+  </div>
+</div>
+<!-- ── 기능 ──────────────────────────────────────────────── -->
+<div class="hdr">기능</div>
+<div class="grp">
+
+  <div class="row">
+    <div class="lb">잔소리 제거<div class="d">빠른 차선 변경 포함</div></div>
+    <div class="sw on" id="sw-nag" onclick="toggle('nag')"></div>
+  </div>
+
+  <div class="segrow">
+    <div class="cap">파형</div>
+    <div class="seg">
+      <span id="seg-wave0" class="sel" onclick="setWave(0)">기본</span>
+      <span id="seg-wave1" onclick="setWave(1)">버스트</span>
+      <span id="seg-wave2" onclick="setWave(2)">EPAS 충실</span>
+    </div>
+  </div>
+
+  <div class="row" style="border-top:1px solid var(--sep)">
+    <div class="lb">서먼 언락<div class="d">주차 중 EU 거리 제한 해제</div></div>
+    <div class="sw" id="sw-smn" onclick="toggle('smn')"></div>
+  </div>
+
+</div>
+<!-- ── 차량 상태 ─────────────────────────────────────────── -->
+<div class="hdr">차량 상태</div>
+<div class="grp">
+  <div class="row"><div class="lb">DAS 신선도</div><div class="val on" id="v-dasage">정상 (180ms)</div></div>
+  <div class="row"><div class="lb">AP 상태</div><div class="val" id="v-ap">결합 (3)</div></div>
+  <div class="row"><div class="lb">손 요구 단계</div><div class="val" id="v-hands">감지됨 (1)</div></div>
+  <div class="row"><div class="lb">제한속도</div><div class="val" id="v-speed">90 km/h</div></div>
+  <div class="row"><div class="lb">차선변경 상태</div><div class="val" id="v-lane">추종중 (3)</div></div>
+</div>
+<!-- ── 버스 ──────────────────────────────────────────────── -->
+<div class="hdr">버스</div>
+<div class="grp">
+  <div class="row"><div class="lb">CAN A <span style="color:var(--label2)">Party · 2/3</span></div><div class="val mono" id="v-canA">1,284,502 / 오류 0</div></div>
+  <div class="row"><div class="lb">CAN B <span style="color:var(--label2)">Chassis · 13/14</span></div><div class="val mono" id="v-canB">842,013 / 오류 2</div></div>
+</div>
+<!-- ── 주입 ──────────────────────────────────────────────── -->
+<div class="hdr">주입</div>
+<div class="grp">
+  <div class="row"><div class="lb">0x370 에코</div><div class="val mono" id="v-echo">495,003</div></div>
+  <div class="row"><div class="lb">0x3FD 주입</div><div class="val mono" id="v-apctl">12,840</div></div>
+  <div class="row"><div class="lb">Tesla OTA</div><div class="val" id="v-ota">감지 안 됨</div></div>
+</div>
+
+<!-- ── 도구 ──────────────────────────────────────────────── -->
+<div class="hdr">도구</div>
+<div class="grp">
+
+  <a class="row" href="/trace/get" onclick="return dlTrace(event)" style="text-decoration:none;color:inherit">
+    <div class="lb tint">게이트 로그 다운로드</div><div class="chev">›</div>
+  </a>
+
+  <div class="row" onclick="clearTrace()">
+    <div class="lb danger">게이트 로그 비우기</div><div class="chev">›</div>
+  </div>
+
+  <div class="row">
+    <div class="lb">펌웨어 업데이트<div class="d" id="ota-state"></div></div>
+    <span class="tbtn" onclick="otaPick()">파일 선택</span>
+    <input type="file" id="ota-file" accept=".bin" style="display:none" onchange="otaUpload(this)">
+  </div>
+
+  <div class="row" id="ota-progress-row" style="display:none">
+    <div class="lb">
+      <div class="ota-track"><div class="ota-fill" id="ota-fill"></div></div>
+    </div>
+    <div class="val mono" id="ota-pct">0%</div>
+  </div>
+
+</div>
+<!-- ── 네트워크 설정 ─────────────────────────────────────── -->
+<div class="hdr">네트워크 설정</div>
+<div class="grp">
+  <div class="row">
+    <div class="lb" style="flex:none">네트워크 이름(SSID)</div>
+    <input class="fld" id="net-ssid" type="text" maxlength="31" autocomplete="off" placeholder="T2CAN-ROAMING" value="T2CAN-ROAMING">
+  </div>
+  <div class="row">
+    <div class="lb" style="flex:none">AP 비밀번호</div>
+    <input class="fld" id="net-appw" type="password" maxlength="63" autocomplete="off" placeholder="8~63자 (WPA2)">
+  </div>
+  <div class="row">
+    <div class="lb" id="net-msg">저장하면 재부팅됩니다</div>
+    <span class="tbtn" onclick="saveNet()">저장</span>
+  </div>
+</div>
+
+<!-- ── 0x3F8 실험 (관측·검증) ─────────────────────────────── -->
+<div class="hdr">0x3F8 실험 · 관측/검증</div>
+<div class="grp">
+  <div class="row"><div class="lb" style="color:var(--orange);font-size:13px;line-height:1.4">⚠ 비트 위치 미검증 · 여러 개 동시 주입 가능(연관 기능은 조합 필요, 단 어느 비트 효과인지 구분은 어려움) · AP 주행(상태 3~5) 중에만 · 안전한 장소에서</div></div>
+  <div class="row"><div class="lb">차선변경 깜빡이 확인 생략<div class="d" id="x3-cur-1">현재 OFF → 주입 시 OFF</div></div><div class="sw" id="x3-sw-1" onclick="setX3f8(1)"></div></div>
+  <div class="row"><div class="lb">안쪽 차선 추월 보조<div class="d" id="x3-cur-2">현재 OFF → 주입 시 ON</div></div><div class="sw on" id="x3-sw-2" onclick="setX3f8(2)"></div></div>
+  <div class="row"><div class="lb">고속도로 밖 자동 차선변경<div class="d" id="x3-cur-3">현재 OFF → 주입 시 ON</div></div><div class="sw on" id="x3-sw-3" onclick="setX3f8(3)"></div></div>
+  <div class="row"><div class="lb">고속도로 밖 확인없는 차선변경<div class="d" id="x3-cur-4">현재 OFF → 주입 시 ON</div></div><div class="sw" id="x3-sw-4" onclick="setX3f8(4)"></div></div>
+  <div class="row"><div class="lb">차세대 자동 속도조절(크루즈)<div class="d" id="x3-cur-5">현재 ON → 주입 시 ON</div></div><div class="sw" id="x3-sw-5" onclick="setX3f8(5)"></div></div>
+  <div class="row"><div class="lb">제한속도 자동 반영<div class="d" id="x3-cur-6">현재 OFF → 주입 시 ON</div></div><div class="sw" id="x3-sw-6" onclick="setX3f8(6)"></div></div>
+  <div class="row"><div class="lb">내비 경로 자동주행<div class="d" id="x3-cur-7">현재 OFF → 주입 시 ON</div></div><div class="sw" id="x3-sw-7" onclick="setX3f8(7)"></div></div>
+  <div class="row"><div class="lb">주입 횟수</div><div class="val mono" id="x3-tx">347</div></div>
+</div>
+
+<div class="ver" id="v-ver">20260916.10</div>
+
+<!-- 정적 미리보기: /api/status 폴링·토글 전송 JS 는 제거되었다. 위 값들은 대표
+     예시로 마크업에 그대로 박아 넣은 것이며, 서버 없이 브라우저에서 바로 열린다. -->
+
+</body>
+</html>

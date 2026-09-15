@@ -1,0 +1,12 @@
+# PlatformIO build output
+.pio/
+
+# Build metadata / scratch
+.build_number
+test/run.exe
+test/run
+
+# Internal / AI-session planning artifacts (never public)
+.superpowers/
+docs/superpowers/
+BUG_REPORT_false_positive.md

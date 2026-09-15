@@ -1,0 +1,316 @@
+<!-- English rendering; the shipped device dashboard UI is in Korean. -->
+<!-- Static preview of the current T2CAN-ROAMING dashboard UI, generated from src/web_page.h — for documentation only. -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>T2CAN-ROAMING</title>
+<style>
+:root {
+  --blue:   #007AFF;
+  --green:  #34C759;
+  --red:    #FF3B30;
+  --orange: #FF9500;
+  --gray:   #8E8E93;
+
+  --bg:        #F2F2F7;
+  --card:      #FFFFFF;
+  --label:     #000000;
+  --label2:    rgba(60,60,67,0.60);
+  --label3:    rgba(60,60,67,0.30);
+  --sep:       rgba(60,60,67,0.29);
+  --fill:      rgba(120,120,128,0.12);
+  --switch-off:rgba(120,120,128,0.16);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #000000;
+    --card:      #1C1C1E;
+    --label:     #FFFFFF;
+    --label2:    rgba(235,235,245,0.60);
+    --label3:    rgba(235,235,245,0.30);
+    --sep:       rgba(84,84,88,0.65);
+    --fill:      rgba(120,120,128,0.24);
+    --switch-off:rgba(120,120,128,0.32);
+  }
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--label);
+  font: 17px/1.294 -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Apple SD Gothic Neo", "Segoe UI", system-ui, sans-serif;
+  padding: max(8px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+           max(32px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  max-width: 560px;
+  margin-inline: auto;
+}
+/* Polling-failure (board disconnected) indicator. With the top header removed there
+   is no place for a message, so the whole screen is dimmed — the goal is to stop a
+   frozen page of stale values being mistaken for a live one. */
+body.stale { opacity: 0.45; transition: opacity 0.2s; }
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 8px 0 8px; }
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 14px 15px 15px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.card .hd {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 15px; font-weight: 600; letter-spacing: -0.24px;
+}
+.card .hd .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.card .big {
+  font-size: 26px; font-weight: 700; letter-spacing: 0.36px;
+  font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.card .note { font-size: 13px; color: var(--label2); letter-spacing: -0.08px; }
+.on  { color: var(--green); }
+.off { color: var(--gray); }
+.bad { color: var(--red); }
+
+
+.hdr {
+  font-size: 13px; font-weight: 400; color: var(--label2);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 26px 16px 7px;
+}
+.grp { background: var(--card); border-radius: 10px; overflow: hidden; }
+.row {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 44px; padding: 10px 16px;
+  position: relative;
+}
+.row + .row::before {
+  content: ""; position: absolute; top: 0; left: 16px; right: 0;
+  height: 1px; transform: scaleY(0.5); transform-origin: top;
+  background: var(--sep);
+}
+.row .lb { flex: 1; min-width: 0; letter-spacing: -0.41px; }
+.row .lb .d { font-size: 13px; color: var(--label2); margin-top: 2px; letter-spacing: -0.08px; }
+.row .val {
+  color: var(--label2); font-variant-numeric: tabular-nums;
+  letter-spacing: -0.41px; text-align: right;
+}
+.row .val.mono { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 15px; }
+.foot { font-size: 13px; color: var(--label2); padding: 7px 16px 0; letter-spacing: -0.08px; }
+.chev { color: var(--label3); font-size: 17px; margin-left: -4px; }
+.tint { color: var(--blue); }
+.danger { color: var(--red); }
+.tbtn {
+  color: var(--blue); font-size: 15px; font-weight: 600;
+  padding: 6px 14px; border-radius: 8px; background: var(--fill);
+  cursor: pointer; user-select: none; letter-spacing: -0.24px; flex: none;
+}
+
+.fld {
+  flex: 1; min-width: 0; text-align: right;
+  border: none; background: transparent; color: var(--label);
+  font: inherit; padding: 0; margin: 0;
+  -webkit-appearance: none; appearance: none; outline: none;
+}
+.fld::placeholder { color: var(--label3); }
+
+.sw {
+  width: 51px; height: 31px; border-radius: 16px; flex: none;
+  background: var(--switch-off); position: relative;
+  transition: background .25s;
+  cursor: pointer;
+}
+.sw.on { background: var(--green); }
+.sw::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 27px; height: 27px; border-radius: 50%; background: #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.16);
+  transition: transform .25s;
+}
+.sw.on::after { transform: translateX(20px); }
+
+.seg {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  background: var(--fill); border-radius: 9px; padding: 2px; gap: 2px;
+}
+.seg span {
+  text-align: center; padding: 6px 4px; border-radius: 7px;
+  font-size: 13px; font-weight: 500; letter-spacing: -0.08px;
+  color: var(--label);
+  cursor: pointer;
+  user-select: none;
+}
+.seg span.sel {
+  background: var(--card); font-weight: 600;
+  box-shadow: 0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04);
+}
+.segrow { padding: 12px 16px; }
+.segrow .cap {
+  font-size: 13px; color: var(--label2); margin-bottom: 8px; letter-spacing: -0.08px;
+}
+
+.ota-track { height: 8px; border-radius: 4px; background: var(--fill); overflow: hidden; }
+.ota-fill { height: 100%; width: 0%; background: var(--blue); transition: width .15s; }
+.ota-fill.ok { background: var(--green); }
+.ota-fill.bad { background: var(--red); }
+
+/* Version string at the very bottom — one small grey line at the foot of the page. */
+.ver {
+  text-align: center; font-size: 12px; color: var(--label3);
+  padding: 24px 0 4px; font-variant-numeric: tabular-nums;
+}
+
+/* Translation caption (not part of the shipped UI). */
+.caption {
+  font-size: 12px; color: var(--label2); text-align: center;
+  padding: 4px 8px 0; letter-spacing: -0.08px;
+}
+</style>
+</head>
+<body>
+
+<div class="caption">English rendering; the shipped device dashboard UI is in Korean.</div>
+
+<!-- ── Instrument cards ─────────────────────────────────── -->
+<div class="cards">
+
+  <div class="card">
+    <div class="hd"><span class="dot" id="dot-drive" style="background:var(--green)"></span>Drive</div>
+    <div class="big on" id="big-drive">Injecting</div>
+    <div class="note" id="note-drive">Pass · 218 Hz</div>
+  </div>
+
+  <div class="card">
+    <div class="hd"><span class="dot" id="dot-summon" style="background:var(--gray)"></span>Summon</div>
+    <div class="big off" id="big-summon">Idle</div>
+    <div class="note" id="note-summon">Waiting for Park</div>
+  </div>
+
+</div>
+
+<!-- ── Operation mode ───────────────────────────────────── -->
+<div class="hdr">Operation mode</div>
+<div class="grp">
+  <div class="segrow">
+    <div class="seg">
+      <span id="seg-listen" onclick="setAct(false)">Listen</span>
+      <span id="seg-active" class="sel" onclick="setAct(true)">Active</span>
+    </div>
+  </div>
+</div>
+<!-- ── Features ─────────────────────────────────────────── -->
+<div class="hdr">Features</div>
+<div class="grp">
+
+  <div class="row">
+    <div class="lb">Nag removal<div class="d">Includes fast lane change</div></div>
+    <div class="sw on" id="sw-nag" onclick="toggle('nag')"></div>
+  </div>
+
+  <div class="segrow">
+    <div class="cap">Waveform</div>
+    <div class="seg">
+      <span id="seg-wave0" class="sel" onclick="setWave(0)">Default</span>
+      <span id="seg-wave1" onclick="setWave(1)">Burst</span>
+      <span id="seg-wave2" onclick="setWave(2)">EPAS-faithful</span>
+    </div>
+  </div>
+
+  <div class="row" style="border-top:1px solid var(--sep)">
+    <div class="lb">Summon unlock<div class="d">Lifts EU distance limit while parked</div></div>
+    <div class="sw" id="sw-smn" onclick="toggle('smn')"></div>
+  </div>
+
+</div>
+<!-- ── Vehicle status ───────────────────────────────────── -->
+<div class="hdr">Vehicle status</div>
+<div class="grp">
+  <div class="row"><div class="lb">DAS freshness</div><div class="val on" id="v-dasage">Fresh (180ms)</div></div>
+  <div class="row"><div class="lb">AP state</div><div class="val" id="v-ap">Engaged (3)</div></div>
+  <div class="row"><div class="lb">Hands demand level</div><div class="val" id="v-hands">Detected (1)</div></div>
+  <div class="row"><div class="lb">Speed limit</div><div class="val" id="v-speed">90 km/h</div></div>
+  <div class="row"><div class="lb">Lane change state</div><div class="val" id="v-lane">Following (3)</div></div>
+</div>
+<!-- ── Bus ──────────────────────────────────────────────── -->
+<div class="hdr">Bus</div>
+<div class="grp">
+  <div class="row"><div class="lb">CAN A <span style="color:var(--label2)">Party · 2/3</span></div><div class="val mono" id="v-canA">1,284,502 / err 0</div></div>
+  <div class="row"><div class="lb">CAN B <span style="color:var(--label2)">Chassis · 13/14</span></div><div class="val mono" id="v-canB">842,013 / err 2</div></div>
+</div>
+<!-- ── Injection ────────────────────────────────────────── -->
+<div class="hdr">Injection</div>
+<div class="grp">
+  <div class="row"><div class="lb">0x370 echo</div><div class="val mono" id="v-echo">495,003</div></div>
+  <div class="row"><div class="lb">0x3FD inject</div><div class="val mono" id="v-apctl">12,840</div></div>
+  <div class="row"><div class="lb">Tesla OTA</div><div class="val" id="v-ota">Not detected</div></div>
+</div>
+
+<!-- ── Tools ────────────────────────────────────────────── -->
+<div class="hdr">Tools</div>
+<div class="grp">
+
+  <a class="row" href="/trace/get" onclick="return dlTrace(event)" style="text-decoration:none;color:inherit">
+    <div class="lb tint">Download gate log</div><div class="chev">›</div>
+  </a>
+
+  <div class="row" onclick="clearTrace()">
+    <div class="lb danger">Clear gate log</div><div class="chev">›</div>
+  </div>
+
+  <div class="row">
+    <div class="lb">Firmware update<div class="d" id="ota-state"></div></div>
+    <span class="tbtn" onclick="otaPick()">Choose file</span>
+    <input type="file" id="ota-file" accept=".bin" style="display:none" onchange="otaUpload(this)">
+  </div>
+
+  <div class="row" id="ota-progress-row" style="display:none">
+    <div class="lb">
+      <div class="ota-track"><div class="ota-fill" id="ota-fill"></div></div>
+    </div>
+    <div class="val mono" id="ota-pct">0%</div>
+  </div>
+
+</div>
+<!-- ── Network settings ─────────────────────────────────── -->
+<div class="hdr">Network settings</div>
+<div class="grp">
+  <div class="row">
+    <div class="lb" style="flex:none">Network name (SSID)</div>
+    <input class="fld" id="net-ssid" type="text" maxlength="31" autocomplete="off" placeholder="T2CAN-ROAMING" value="T2CAN-ROAMING">
+  </div>
+  <div class="row">
+    <div class="lb" style="flex:none">AP password</div>
+    <input class="fld" id="net-appw" type="password" maxlength="63" autocomplete="off" placeholder="8–63 chars (WPA2)">
+  </div>
+  <div class="row">
+    <div class="lb" id="net-msg">Saving reboots the device</div>
+    <span class="tbtn" onclick="saveNet()">Save</span>
+  </div>
+</div>
+
+<!-- ── 0x3F8 experiment (observe/verify) ────────────────── -->
+<div class="hdr">0x3F8 experiment · observe/verify</div>
+<div class="grp">
+  <div class="row"><div class="lb" style="color:var(--orange);font-size:13px;line-height:1.4">⚠ Bit positions unverified · multiple bits can be injected at once (related features need combinations, but which bit caused an effect is hard to tell) · only during AP driving (state 3–5) · in a safe place</div></div>
+  <div class="row"><div class="lb">Skip lane-change blinker confirmation<div class="d" id="x3-cur-1">Now OFF → inject OFF</div></div><div class="sw" id="x3-sw-1" onclick="setX3f8(1)"></div></div>
+  <div class="row"><div class="lb">Inner-lane overtake assist<div class="d" id="x3-cur-2">Now OFF → inject ON</div></div><div class="sw on" id="x3-sw-2" onclick="setX3f8(2)"></div></div>
+  <div class="row"><div class="lb">Auto lane change off-highway<div class="d" id="x3-cur-3">Now OFF → inject ON</div></div><div class="sw on" id="x3-sw-3" onclick="setX3f8(3)"></div></div>
+  <div class="row"><div class="lb">Unconfirmed lane change off-highway<div class="d" id="x3-cur-4">Now OFF → inject ON</div></div><div class="sw" id="x3-sw-4" onclick="setX3f8(4)"></div></div>
+  <div class="row"><div class="lb">Next-gen adaptive cruise<div class="d" id="x3-cur-5">Now ON → inject ON</div></div><div class="sw" id="x3-sw-5" onclick="setX3f8(5)"></div></div>
+  <div class="row"><div class="lb">Auto-apply speed limit<div class="d" id="x3-cur-6">Now OFF → inject ON</div></div><div class="sw" id="x3-sw-6" onclick="setX3f8(6)"></div></div>
+  <div class="row"><div class="lb">Navigate-on-route autopilot<div class="d" id="x3-cur-7">Now OFF → inject ON</div></div><div class="sw" id="x3-sw-7" onclick="setX3f8(7)"></div></div>
+  <div class="row"><div class="lb">Inject count</div><div class="val mono" id="x3-tx">347</div></div>
+</div>
+
+<div class="ver" id="v-ver">20260916.10</div>
+
+<!-- Static preview: the /api/status polling and toggle-POST JS has been removed. The
+     values above are representative samples baked into the markup, and the page opens
+     directly in a browser with no server. -->
+
+</body>
+</html>
