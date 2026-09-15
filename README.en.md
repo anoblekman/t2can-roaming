@@ -2,6 +2,11 @@
 
 # T2CAN-ROAMING
 
+[![Release](https://img.shields.io/github/v/release/anoblekman/t2can-roaming?sort=semver)](https://github.com/anoblekman/t2can-roaming/releases/latest)
+[![License: GPL-3.0](https://img.shields.io/github/license/anoblekman/t2can-roaming)](LICENSE)
+[![Board: LilyGo T-2CAN](https://img.shields.io/badge/board-LilyGo%20T--2CAN%20(ESP32--S3)-blue)](https://www.lilygo.cc/)
+[![Build: PlatformIO](https://img.shields.io/badge/build-PlatformIO-orange)](https://platformio.org/)
+
 Firmware for a **LilyGo T-2CAN** board (ESP32-S3, dual CAN) that attaches to a
 personally-owned **Tesla Model 3 Highland (HW4)** and adjusts a few driver-assist
 and regional behaviors on the owner's own vehicle. It is a T-2CAN-specific rewrite
@@ -93,6 +98,17 @@ The ESP32-S3 pin map (MCP2515 SPI pins, TWAI TX/RX, BOOT button) lives in
 ---
 
 ## Build & flash
+
+### Download a pre-built binary
+
+Grab the latest firmware from the **[Releases page](https://github.com/anoblekman/t2can-roaming/releases/latest)** — no build required:
+
+| File | Use |
+|------|-----|
+| `t2can-roaming-<version>-ota.bin` | Web-dashboard OTA (app partition) |
+| `t2can-roaming-<version>-full.bin` | Serial full-flash: `esptool.py --chip esp32s3 write_flash 0x0 <file>` |
+
+Or build from source below.
 
 Built with **PlatformIO**:
 

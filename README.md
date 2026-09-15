@@ -2,6 +2,11 @@
 
 # T2CAN-ROAMING
 
+[![Release](https://img.shields.io/github/v/release/anoblekman/t2can-roaming?sort=semver)](https://github.com/anoblekman/t2can-roaming/releases/latest)
+[![License: GPL-3.0](https://img.shields.io/github/license/anoblekman/t2can-roaming)](LICENSE)
+[![Board: LilyGo T-2CAN](https://img.shields.io/badge/board-LilyGo%20T--2CAN%20(ESP32--S3)-blue)](https://www.lilygo.cc/)
+[![Build: PlatformIO](https://img.shields.io/badge/build-PlatformIO-orange)](https://platformio.org/)
+
 **LilyGo T-2CAN** 보드(ESP32-S3, 듀얼 CAN)용 펌웨어로, 개인 소유의
 **Tesla Model 3 Highland (HW4)** 차량에 연결하여 차주 본인 차량의 일부 운전자
 보조 기능과 지역별 동작을 조정합니다. 이 프로젝트는
@@ -96,6 +101,17 @@ ESP32-S3 핀 맵(MCP2515 SPI 핀, TWAI TX/RX, BOOT 버튼)은
 ---
 
 ## 빌드 및 플래시
+
+### 미리 빌드된 바이너리 받기
+
+빌드 없이 최신 펌웨어를 **[Releases 페이지](https://github.com/anoblekman/t2can-roaming/releases/latest)** 에서 받으세요:
+
+| 파일 | 용도 |
+|------|-----|
+| `t2can-roaming-<version>-ota.bin` | 웹 대시보드 OTA (앱 파티션) |
+| `t2can-roaming-<version>-full.bin` | 시리얼 전체 플래시: `esptool.py --chip esp32s3 write_flash 0x0 <파일>` |
+
+또는 아래에서 소스로 직접 빌드하세요.
 
 **PlatformIO**로 빌드합니다.
 
